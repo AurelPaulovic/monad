@@ -35,4 +35,15 @@ class Just extends Maybe {
         else throw new MonadException("Method '$name' did not return a Maybe monad");
     }
 
+    public function bind($func) {
+        if(is_callable($func)) {
+            $result = $func($this->val);
+        } else {
+            $result = call_user_func($func, $this->val);
+        }
+
+        if($result instanceof Maybe) return $result;
+        else throw new MonadException("Method '$func' did not return a Maybe monad");
+    }
+
 } 
